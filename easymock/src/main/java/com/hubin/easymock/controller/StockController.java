@@ -14,27 +14,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hubin.easymock.entity.Stock;
-import com.hubin.easymock.service.SocketService;
+import com.hubin.easymock.service.StockService;
 
 /**
- * <一句话功能简述> <功能详细描述>
- * 
  * @author Administrator
  * @version [版本号, 2016-1-14]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-@Controller
+@Controller("stockController")
 @RequestMapping("stockController/")
 public class StockController {
-    @Resource(name = "socketService")
-    SocketService socketService;
+    @Resource(name = "stockService")
+    StockService stockService;
     
     @RequestMapping("getTotalPrice")
     @ResponseBody
     public String getTotalPrice() {
-        List<Stock> socketList = socketService.getData();
-        double total = socketService.getTotalPrice(socketList);
+        List<Stock> socketList = stockService.getData();
+        double total = stockService.getTotalPrice(socketList);
         return String.valueOf(total);
     }
 }

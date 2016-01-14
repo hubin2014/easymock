@@ -3,27 +3,31 @@
  * Copyright 2016, All rights reserved 描 述: <描述> 修 改 人: Administrator 修改时间:
  * 2016-1-7 跟踪单号: <跟踪单号> 修改单号: <修改单号> 修改内容: <修改内容>
  */
-package com.hubin.easymock;
+package com.hubin.easymock.service;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.easymock.EasyMock;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.hubin.easymock.dao.StockMarket;
 import com.hubin.easymock.entity.Stock;
-import com.hubin.easymock.service.SocketService;
 
-public class StockTest {
-    private static SocketService socketService;
+public class StockServiceTest {
+    private StockService socketService = null;
     
-    private static StockMarket stockMarket;
+    private StockMarket stockMarket = null;
     
-    @BeforeClass
-    public static void initUp() {
+    @Before
+    public void initUp() {
         stockMarket = EasyMock.createMock(StockMarket.class);
+        socketService = new StockService();
+        // 篡改真实的环境中的stockMarket
+        socketService.stockMarket = stockMarket;
     }
     
     public List<Stock> buildDate() {
@@ -51,23 +55,16 @@ public class StockTest {
                 .andReturn(100.00)
                 .times(1, 2);
         EasyMock.replay(stockMarket);
-        // 篡改真实的环境中的stockMarket
-        socketService.setStockMarket(stockMarket);
         double total = socketService.getTotalPrice(buildDate());
         System.out.println(total);
     }
     
-    /**
-     * 真实测试
-     * 
-     * @return void [返回类型说明]
-     * @exception throws [违例类型] [违例说明]
-     * @see [类、类#方法、类#成员]
-     */
     @Test
-    public void testGetTotalPrice2() {
-        socketService.setStockMarket(new StockMarket());
-        double total = socketService.getTotalPrice(buildDate());
-        System.out.println(total);
+    public void testGetData() {
+        EasyMock.expect(stockMarket.buildDate())
+                .andReturn(buildDate())
+                .times(1, 2);
+        EasyMock.replay(stockMarket);
+        assertEquals(true, socketService.getData().size() == 2);
     }
 }

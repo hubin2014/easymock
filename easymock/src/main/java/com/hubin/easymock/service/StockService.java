@@ -22,10 +22,10 @@ import org.springframework.stereotype.Service;
 import com.hubin.easymock.dao.StockMarket;
 import com.hubin.easymock.entity.Stock;
 
-@Service("socketService")
-public class SocketService {
+@Service("stockService")
+public class StockService {
     @Resource(name = "stockMarket")
-    private StockMarket stockMarket;
+    public StockMarket stockMarket;
     
     /**
      * @param 对stockMarket进行赋值
